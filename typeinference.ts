@@ -1,5 +1,4 @@
 import { Context, Expression, LiteralBoolean, LiteralInt, LiteralString, Scheme, Subsitution, Type } from "./types";
-import { repl } from "./repl";
 
 function applySubstitution(substitution: Subsitution, type: Type): Type {
     switch (type.kind) {
@@ -201,5 +200,3 @@ export function typeInference(context: Context, expression: Expression) {
     const finalType = applySubstitution(substitution, type);
     return finalType
 }
-
-repl();

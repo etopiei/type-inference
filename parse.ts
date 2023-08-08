@@ -1,10 +1,38 @@
 import { Expression } from "./types";
 
 export function parse(input: string): Expression {
-    // TODO: Fix parsing bug with strings with spaces in them (i.e. in string context, don't split on space)
-    // Also maybe strip all whitespace so the parser is more resilient to accidently spacing things wrong
-    const tokens = input.split(" ");
+    const tokens = inputToTokens(input);
     return parseExpression(tokens);
+}
+
+function inputToTokens(input: string): string[] {
+    let tokens: string[] = [];
+    let currentToken = '';
+    let stringContext = false;
+
+    for (let i = 0; i < input.length; i++) {
+        if (input.charAt(i) === '"') {
+            currentToken += input.charAt(i);
+            if (stringContext) {
+                tokens.push(currentToken);
+                currentToken = "";
+            }
+            stringContext = !stringContext;
+        } else if (input.charAt(i) === " " && !stringContext) {
+            if (currentToken !== "") {
+                tokens.push(currentToken);
+            }
+            currentToken = "";
+        } else {
+            currentToken += input.charAt(i);
+        }
+    }
+
+    if (currentToken !== "") {
+        tokens.push(currentToken);
+    }
+
+    return tokens;
 }
 
 function expect(expectedToken: string, tokens: string[]): [string[], string] {
@@ -122,68 +150,3 @@ function parseExpression(tokens: string[]): Expression {
 
     return parseLiteralOrVariable(tokens);
 }
-
-// DUMMY CALLS PREVIOUSLY
-    // SUCCEEDS: \a -> a
-    // return {
-    //     "kind": "ELambda",
-    //     "variable": "a",
-    //     "expression": {kind: "EVariable", name: "a"}
-    // }
-    // SUCCEEDS: 1
-    // return {
-    //     kind: "ELiteral",
-    //     literalValue: {
-    //         kind: "LiteralInt",
-    //         value: 1
-    //     }
-    // }
-    // SUCCEES: (\a -> true) 1
-    // return {
-    //     kind: "EApplication",
-    //     leftExpression: {
-    //         kind: "ELambda",
-    //         variable: "a",
-    //         expression: {
-    //             kind: "ELiteral",
-    //             literalValue: {
-    //                 kind: "LiteralBoolean",
-    //                 value: true
-    //             }
-    //         }
-    //     },
-    //     rightExpression: {
-    //         kind: "ELiteral",
-    //         literalValue: {
-    //             kind: "LiteralInt",
-    //             value: 1
-    //         }
-    //     }
-    // }
-    // return {
-    //     kind: "ELet",
-    //     name: "z",
-    //     expression: {
-    //         kind: "ELambda",
-    //         variable: "x",
-    //         expression: {
-    //             kind: "EVariable",
-    //             name: "x"
-    //         }
-    //     },
-    //     inExpression: {
-    //         kind: "EApplication",
-    //         leftExpression: {
-    //             kind: "EVariable",
-    //             name: "z",
-    //         },
-    //         rightExpression: {
-    //             kind: "ELiteral",
-    //             literalValue: {
-    //                 kind: "LiteralInt",
-    //                 value: 1,
-    //             }
-    //         },
-    //     }
-    // }
-

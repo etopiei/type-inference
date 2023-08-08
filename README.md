@@ -19,7 +19,7 @@ This talk for which I'll upload slides and videos (once I've actually given the 
 ```
 $ npm install
 $ npm install -g ts-node
-$ ts-node typeinference.ts
+$ ts-node repl.ts
 > \x ->x
 'a -> 'a
 
