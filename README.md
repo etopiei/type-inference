@@ -20,11 +20,19 @@ This talk for which I'll upload slides and videos (once I've actually given the 
 $ npm install
 $ npm install -g ts-node
 $ ts-node repl.ts
-> \x ->x
-'a -> 'a
+ >  (x) => x
+T -> T
 
-> "abc"
+ >  "abc"
 String
 
-> <Ctrl+C>
+ >  intToString(4)
+String
+
+ >  let a = 4;
+ .. let addFour = add(a);
+ .. addFour(6)
+Int
+
+ > <Ctrl+C>
 ```

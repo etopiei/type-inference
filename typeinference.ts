@@ -97,8 +97,8 @@ function inferLiteral(literal: LiteralBoolean | LiteralInt | LiteralString): [Su
 
 let TYPE_COUNTER = 0
 function newTypeVariable(): Type {
-    const letter = String.fromCharCode("a".charCodeAt(0) + TYPE_COUNTER++);
-    return {kind: "TVar", name: `'${letter}`};
+    const letter = String.fromCharCode("T".charCodeAt(0) + TYPE_COUNTER++);
+    return {kind: "TVar", name: letter};
 }
 
 function applySubstitutionToScheme(substitution: Subsitution, scheme: Scheme): Scheme {
