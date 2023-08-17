@@ -3,6 +3,7 @@ import prompt from "prompt-sync";
 import { typeInference } from "./typeinference";
 import { parse } from "./parse";
 import { Context, Type } from "./types";
+import { executeExpression } from "./execute";
 
 function printType(type: Type): string {
     if (type.kind === "TFunction") {
@@ -31,6 +32,7 @@ export function repl() {
             const ast = parse(input);
             const result = typeInference(primitives, ast);
             console.log("\x1b[36m%s\x1b[0m", printType(result));
+            console.log(executeExpression(ast, undefined));
             console.log("");
         } catch (e) {
             console.error("TYPE ERROR: ", e);
