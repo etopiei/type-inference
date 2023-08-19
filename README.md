@@ -2,7 +2,7 @@
 
 This is a bare-bones type inference implementation.
 
-It also includes a REPL (well, a 'type-REPL' - we can't actually execute the code just yet) and parser for the language we are inferring types of.
+It also includes a REPL and parser for the language we are inferring types of.
 
 This code was written for a talk: "Type Inference Explained (With Typescript, not maths)"
 
