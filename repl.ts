@@ -15,6 +15,14 @@ function printType(type: Type): string {
     }
 }
 
+function printEvaluatedExpression (result: any) {
+    if (typeof(result) === "function") {
+        return "Lambda Function"
+    } else {
+        return result;
+    }
+}
+
 const primitives: Context = {
     "add": { "variables": [], type: { kind: "TFunction", from: { kind: "TInt" }, to: { kind: "TFunction", from: { kind: "TInt" }, to: { kind: "TInt" } } } },
     "mult": { "variables": [], type: { kind: "TFunction", from: { kind: "TInt" }, to: { kind: "TFunction", from: { kind: "TInt" }, to: { kind: "TInt" } } } },
@@ -32,7 +40,7 @@ export function repl() {
             const ast = parse(input);
             const result = typeInference(primitives, ast);
             console.log("\x1b[36m%s\x1b[0m", printType(result));
-            console.log(executeExpression(ast, undefined));
+            console.log(printEvaluatedExpression(executeExpression(ast, undefined)));
             console.log("");
         } catch (e) {
             console.error("TYPE ERROR: ", e);
