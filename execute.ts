@@ -5,7 +5,7 @@ type VariableTracker = {[key: string]: any};
 const primitives: VariableTracker = {
     "add": (x: number) => (y: number) => x + y,
     "mult": (x: number) => (y: number) => x * y,
-    "intToString": (x: number) => `"${x.toString()}"`,
+    "intToString": (x: number) => x.toString(),
 };
 
 export const executeExpression = (expression: Expression, variableTracker: VariableTracker | undefined): any => {

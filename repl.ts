@@ -18,6 +18,8 @@ function printType(type: Type): string {
 function printEvaluatedExpression (result: any) {
     if (typeof(result) === "function") {
         return "Lambda Function"
+    } else if (typeof(result) === "string") {
+        return `"${result}"`;
     } else {
         return result;
     }

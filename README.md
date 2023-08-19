@@ -22,17 +22,21 @@ $ npm install -g ts-node
 $ ts-node repl.ts
  >  (x) => x
 T -> T
+Lambda Function
 
  >  "abc"
 String
+"abc"
 
  >  intToString(4)
 String
+"4"
 
  >  let a = 4;
  .. let addFour = add(a);
  .. addFour(6)
 Int
+10
 
  > <Ctrl+C>
 ```
