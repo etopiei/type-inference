@@ -23,6 +23,25 @@ function inputToTokens(input: string): string[] {
                 tokens.push(currentToken);
             }
             currentToken = "";
+        } else if (input.charAt(i) === "(" && !stringContext) {
+            if (currentToken === "") {
+                // This is an anonymous function!
+                currentToken = "\\";
+            } else {
+                // This is an application, split it into "before bracket" and "token in expr after"
+                tokens.push(currentToken);
+                currentToken = "";
+            }
+        } else if (input.charAt(i) === ")" && !stringContext) {
+            // This signifies the end of a token, but don't include it in the parsing
+            tokens.push(currentToken);
+            currentToken = "";
+        } else if (input.charAt(i) === ";" && !stringContext) {
+            if (currentToken != "") {
+                tokens.push(currentToken);
+            }
+            currentToken = "";
+            tokens.push("in");
         } else {
             currentToken += input.charAt(i);
         }
@@ -54,7 +73,7 @@ function parseLetExpression(tokens: string[]): Expression {
 
     let inTokenIndex = remainingTokens.findIndex((token) => token === "in");
     if (inTokenIndex === -1) {
-        throw new Error("Parse error: Let expression expects an 'in'.");
+        throw new Error("Parse error: Let expression expects a semi-colon and new line");
     }
 
     const expression = parseExpression(remainingTokens.slice(0, inTokenIndex));
@@ -72,7 +91,7 @@ function parseLambdaExpresion(tokens: string[]): Expression {
     let _: any;
     let [remainingTokens, variableNameWithSlash] = consume(tokens);
     const variable = variableNameWithSlash.slice(1);
-    [remainingTokens, _] = expect("->", remainingTokens);
+    [remainingTokens, _] = expect("=>", remainingTokens);
 
     const expression = parseExpression(remainingTokens);
 

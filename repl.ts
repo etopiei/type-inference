@@ -3,6 +3,7 @@ import prompt from "prompt-sync";
 import { typeInference } from "./typeinference";
 import { parse } from "./parse";
 import { Context, Type } from "./types";
+import { executeExpression } from "./execute";
 
 function printType(type: Type): string {
     if (type.kind === "TFunction") {
@@ -11,6 +12,16 @@ function printType(type: Type): string {
         return type.name;
     } else {
         return type.kind.slice(1);
+    }
+}
+
+function printEvaluatedExpression (result: any) {
+    if (typeof(result) === "function") {
+        return "Lambda Function"
+    } else if (typeof(result) === "string") {
+        return `"${result}"`;
+    } else {
+        return result;
     }
 }
 
@@ -23,11 +34,15 @@ const primitives: Context = {
 export function repl() {
     var inputPrompt: any = prompt({ sigint: true });
     while (true) {
-        const input = inputPrompt("> ")!;
+        let input = inputPrompt(" > ")!;
+        while (input.endsWith(";")) {
+            input += ` ${inputPrompt(".. ")}`;
+        }
         try {
             const ast = parse(input);
             const result = typeInference(primitives, ast);
-            console.log(printType(result));
+            console.log("\x1b[36m%s\x1b[0m", printType(result));
+            console.log(printEvaluatedExpression(executeExpression(ast, undefined)));
             console.log("");
         } catch (e) {
             console.error("TYPE ERROR: ", e);
