@@ -31,7 +31,7 @@ const primitives: Context = {
     "intToString": { "variables": [], type: { kind: "TFunction", from: { kind: "TInt" }, to: { kind: "TString" } } },
 };
 
-export function repl() {
+export function repl(showTypes=true, showValues=true) {
     var inputPrompt: any = prompt({ sigint: true });
     while (true) {
         let input = inputPrompt(" > ")!;
@@ -41,8 +41,12 @@ export function repl() {
         try {
             const ast = parse(input);
             const result = typeInference(primitives, ast);
-            console.log("\x1b[36m%s\x1b[0m", printType(result));
-            console.log(printEvaluatedExpression(executeExpression(ast, undefined)));
+            if (showTypes) {
+                console.log("\x1b[36m%s\x1b[0m", printType(result));
+            }
+            if (showValues) {
+                console.log(printEvaluatedExpression(executeExpression(ast, undefined)));
+            }
             console.log("");
         } catch (e) {
             console.error("TYPE ERROR: ", e);
@@ -50,4 +54,14 @@ export function repl() {
     }
 }
 
-repl();
+if (process.argv.length > 1) {
+    if (process.argv[2] === "--types") {
+        repl(true, false);
+    } else if (process.argv[2] === "--exec") {
+        repl(false, true);
+    } else {
+        repl();
+    }
+} else {
+    repl();
+}

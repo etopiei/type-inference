@@ -40,3 +40,17 @@ Int
 
  > <Ctrl+C>
 ```
+
+## Options
+
+To run with just types inferred:
+
+```
+$ ts-node repl.ts --types
+```
+
+To only execute and not print types:
+
+```
+$ ts-node repl.ts --exec
+```
